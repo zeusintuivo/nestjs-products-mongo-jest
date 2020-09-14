@@ -1,10 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, HttpStatus } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
 import { ProductModule } from './../src/product/product.module';
 import CreateProductDTO from './../src/product/dto/product.dto';
 import 'dotenv/config';
+
+let productId: string;
 
 describe('(e2e)', () => {
   let app: INestApplication;
@@ -33,6 +35,7 @@ describe('(e2e)', () => {
         .expect('{"message":"received"}');
     });
     it('/create (POST)', () => {
+
       const product: CreateProductDTO = {
         name: "laptop",
         description: "Dell Laptop",
@@ -44,7 +47,24 @@ describe('(e2e)', () => {
         .post('/product/create')
         .send(product)
         .expect(200)
-        .expect('{"message":"received"}');
+        .expect((res) => {
+          expect(res.headers).toBeDefined();
+          // console.log(res.text);
+          expect(res.text).toBeDefined();
+          // console.log(res.body);
+          expect(res.body).toBeDefined();
+          const body: any = JSON.parse(res.text);
+          expect(body).toBeDefined();
+          expect(body.product).toBeDefined();
+          expect(body.product._id).toBeDefined();
+          productId = body.product._id;
+          expect(body.product.name).toEqual(product.name);
+          expect(body.product.description).toEqual(product.description);
+          expect(body.product.price).toEqual(product.price);
+          expect(body.product.createdAt).toBeDefined();
+        })
+        // .expect(HttpStatus.OK);
+        .expect(HttpStatus.CREATED);
     });
   });
 });
