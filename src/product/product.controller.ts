@@ -70,6 +70,17 @@ export class ProductController {
     })
   }
 
+  // TODO: Disabled using Query since it shows errror
+  //       Cast to ObjectId failed for value "update" at path "_id" for model "Product"
+  // @Put('/update')
+  // async updatePut(@Res() res, @Query('productID') productID, @Body() createProductDTO: CreateProductDTO)  {
+  //   const product = await this.productService.updateProduct(productID, createProductDTO);
+  //   if (!product) throw new NotFoundException(productID);
+  //   return res.status(HttpStatus.FOUND).json({
+  //     product
+  //   })
+  // }
+
   @Delete('/:productID')
   async productDelete(@Res() res, @Param('productID') productID)  {
     const product = await this.productService.deleteProduct(productID);
@@ -79,17 +90,19 @@ export class ProductController {
     })
   }
 
-  @Delete('/delete')
-  async deleteDelete(@Res() res, @Query('productID') productID)  {
-    console.log(productID);
-    if (!productID.match(/^[0-9a-fA-F]{24}$/)) {
-      throw new BadGatewayException(productID);
-    }
-    const product = await this.productService.deleteProduct(productID);
-    if (!product) throw new NotFoundException(productID);
-    return res.status(HttpStatus.FOUND).json({
-      product
-    })
-  }
+  // TODO: Disabled using Query since it shows errror
+  //       Cast to ObjectId failed for value "update" at path "_id" for model "Product"
+  // @Delete('/delete')
+  // async deleteDelete(@Res() res, @Query('productID') productID)  {
+  //   // console.log(productID);
+  //   if (!productID.match(/^[0-9a-fA-F]{24}$/)) {
+  //     throw new BadGatewayException(productID);
+  //   }
+  //   const product = await this.productService.deleteProduct(productID);
+  //   if (!product) throw new NotFoundException(productID);
+  //   return res.status(HttpStatus.FOUND).json({
+  //     product
+  //   })
+  // }
 
 }

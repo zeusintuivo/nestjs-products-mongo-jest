@@ -21,6 +21,13 @@ const product2: CreateProductDTO = {
   price: 50,
   createdAt: new Date()
 };
+const product3: CreateProductDTO = {
+  name: "Monitor",
+  description: "Samsung Monitor",
+  imageURL: "http:localhost/product_image.png",
+  price: 150,
+  createdAt: new Date()
+};
 
 describe('(e2e)', () => {
   let app: INestApplication;
@@ -205,6 +212,30 @@ describe('(e2e)', () => {
           expect(body.product.createdAt).toBeDefined();
         })
     }); // it
+    // TODO: Disabled using Query since it shows errror
+    //       Cast to ObjectId failed for value "update" at path "_id" for model "Product"
+    // it('/.../update?productID= (PUT)', () => {
+    //   // console.log(productId);
+    //   return request(app.getHttpServer())
+    //     .put('/product/update?productID=' + productId )
+    //     .send(product3).expect(HttpStatus.FOUND)
+    //     .expect((res) => {
+    //       expect(res.headers).toBeDefined();
+    //       expect(res.text).toBeDefined();
+    //       expect(res.body).toBeDefined();
+    //       const body: any = JSON.parse(res.text);
+    //       expect(body).toBeDefined();
+    //       expect(body.product).toBeDefined();
+    //       expect(body.product._id).toBeDefined();
+    //       productId = body.product._id;
+    //       expect(body.product.name).toBeDefined();
+    //       expect(body.product.name).toEqual(product3.name);
+    //       expect(body.product.description).toBeDefined();
+    //       expect(body.product.description).toEqual(product3.description);
+    //       expect(body.product.price).toBeDefined();
+    //       expect(body.product.createdAt).toBeDefined();
+    //     })
+    // }); // it
     it('/.../:productID (DELETE)', () => {
       // console.log(productId);
       return request(app.getHttpServer())
@@ -226,6 +257,8 @@ describe('(e2e)', () => {
     }); // it
     it('/.../:productID not found (DELETE)', () =>
       request(app.getHttpServer()).delete('/product/' + productId).expect(HttpStatus.NOT_FOUND));
+    // TODO: Disabled using Query since it shows errror
+    //       Cast to ObjectId failed for value "update" at path "_id" for model "Product"
     // it('/.../create again (POST)', () => {
     //   return request(app.getHttpServer())
     //     .post('/product/create')
@@ -239,6 +272,8 @@ describe('(e2e)', () => {
     //       productId = body.product._id;
     //     })
     // }); // it
+    // TODO: Disabled using Query since it shows errror
+    //       Cast to ObjectId failed for value "update" at path "_id" for model "Product"
     // it('/.../delete?productID= again (DELETE)', () => {
     //   console.log(productId);
     //   return request(app.getHttpServer())
@@ -259,6 +294,8 @@ describe('(e2e)', () => {
     //       expect(body.product.createdAt).toBeDefined();
     //     })
     // }); // it
+    // TODO: Disabled using Query since it shows errror
+    //       Cast to ObjectId failed for value "update" at path "_id" for model "Product"
     // it('/.../delete?productID= again not found (DELETE)', () =>
     //   request(app.getHttpServer()).delete('/product/delete?productID=' + productId).expect(HttpStatus.NOT_FOUND));
 
