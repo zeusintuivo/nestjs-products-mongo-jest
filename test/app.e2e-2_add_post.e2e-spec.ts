@@ -7,6 +7,13 @@ import CreateProductDTO from './../src/product/dto/product.dto';
 import 'dotenv/config';
 
 let productId: string;
+const product: CreateProductDTO = {
+  name: "laptop",
+  description: "Dell Laptop",
+  imageURL: "http:localhost/product_image.png",
+  price: 1000,
+  createdAt: new Date()
+};
 
 describe('(e2e)', () => {
   let app: INestApplication;
@@ -39,13 +46,6 @@ describe('(e2e)', () => {
     });
 
     it('/.../create (POST)', () => {
-      const product: CreateProductDTO = {
-        name: "laptop",
-        description: "Dell Laptop",
-        imageURL: "http:localhost/product_image.png",
-        price: 1000,
-        createdAt: new Date()
-      };
       return request(app.getHttpServer())
         .post('/product/create')
         .send(product).expect(HttpStatus.CREATED)
@@ -133,10 +133,12 @@ describe('(e2e)', () => {
           expect(body.product.createdAt).toBeDefined();
         })
     });
-    it('/.../:productID (GET)', () => {
+    it('/.../:productID not found (POST)', () =>
+      request(app.getHttpServer()).post('/product/5ca76cffc2b185489f4bd123').expect(HttpStatus.NOT_FOUND));
+    it('/.../:productID (POST)', () => {
       // console.log(productId);
       return request(app.getHttpServer())
-        .get('/product/' + productId ).expect(HttpStatus.FOUND)
+        .post('/product/' + productId ).expect(HttpStatus.FOUND)
         .expect((res) => {
           expect(res.headers).toBeDefined();
           expect(res.text).toBeDefined();
@@ -152,6 +154,62 @@ describe('(e2e)', () => {
           expect(body.product.createdAt).toBeDefined();
         })
     });
+    it('/.../:productID (DELETE)', () => {
+      // console.log(productId);
+      return request(app.getHttpServer())
+        .delete('/product/' + productId ).expect(HttpStatus.FOUND)
+        .expect((res) => {
+          expect(res.headers).toBeDefined();
+          expect(res.text).toBeDefined();
+          expect(res.body).toBeDefined();
+          const body: any = JSON.parse(res.text);
+          expect(body).toBeDefined();
+          expect(body.product).toBeDefined();
+          expect(body.product._id).toBeDefined();
+          productId = body.product._id;
+          expect(body.product.name).toBeDefined();
+          expect(body.product.description).toBeDefined();
+          expect(body.product.price).toBeDefined();
+          expect(body.product.createdAt).toBeDefined();
+        })
+    }); // it
+    it('/.../:productID not found (DELETE)', () =>
+      request(app.getHttpServer()).delete('/product/' + productId).expect(HttpStatus.NOT_FOUND));
+    // it('/.../create again (POST)', () => {
+    //   return request(app.getHttpServer())
+    //     .post('/product/create')
+    //     .send(product).expect(HttpStatus.CREATED)
+    //     .expect((res) => {
+    //       expect(res.text).toBeDefined();
+    //       const body: any = JSON.parse(res.text);
+    //       expect(body).toBeDefined();
+    //       expect(body.product).toBeDefined();
+    //       expect(body.product._id).toBeDefined();
+    //       productId = body.product._id;
+    //     })
+    // }); // it
+    // it('/.../:productID again (DELETE)', () => {
+    //   console.log(productId);
+    //   return request(app.getHttpServer())
+    //     .delete('/product/delete?productID=' + productId )
+    //     .expect(HttpStatus.FOUND)
+    //     .expect((res) => {
+    //       expect(res.headers).toBeDefined();
+    //       expect(res.text).toBeDefined();
+    //       expect(res.body).toBeDefined();
+    //       const body: any = JSON.parse(res.text);
+    //       expect(body).toBeDefined();
+    //       expect(body.product).toBeDefined();
+    //       expect(body.product._id).toBeDefined();
+    //       productId = body.product._id;
+    //       expect(body.product.name).toBeDefined();
+    //       expect(body.product.description).toBeDefined();
+    //       expect(body.product.price).toBeDefined();
+    //       expect(body.product.createdAt).toBeDefined();
+    //     })
+    // }); // it
+    // it('/.../:productID again not found (DELETE)', () =>
+    //   request(app.getHttpServer()).delete('/product/delete/?productID=' + productId).expect(HttpStatus.NOT_FOUND));
 
   });
 });

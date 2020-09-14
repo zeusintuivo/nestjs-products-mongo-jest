@@ -23,11 +23,11 @@ export class ProductService {
     return await product.save();
   }
   async deleteProduct(productID: string): Promise<Product>{
-    const deletedProduct = await this.productModel.findByIdAndDelete(productID);
-    return deletedProduct;
+    const product = await this.productModel.findByIdAndDelete(productID);
+    return product;
   }
   async updateProduct(productID: string, createProductDTO: CreateProductDTO): Promise<Product>{
-    const updatedProduct = await this.productModel.findByIdAndUpdate(productID, createProductDTO, {new: true});
-    return updatedProduct;
+    const product = await this.productModel.findByIdAndUpdate(productID, createProductDTO, {new: true});
+    return product;
   }
 }
