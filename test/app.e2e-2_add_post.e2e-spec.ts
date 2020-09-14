@@ -14,6 +14,13 @@ const product: CreateProductDTO = {
   price: 1000,
   createdAt: new Date()
 };
+const product2: CreateProductDTO = {
+  name: "mouse",
+  description: "Mouse Razer",
+  imageURL: "http:localhost/product_image.png",
+  price: 50,
+  createdAt: new Date()
+};
 
 describe('(e2e)', () => {
   let app: INestApplication;
@@ -153,7 +160,51 @@ describe('(e2e)', () => {
           expect(body.product.price).toBeDefined();
           expect(body.product.createdAt).toBeDefined();
         })
-    });
+    }); // it
+    it('/.../:productID (PUT)', () => {
+      // console.log(productId);
+      return request(app.getHttpServer())
+        .put('/product/' + productId )
+        .send(product2).expect(HttpStatus.FOUND)
+        .expect((res) => {
+          expect(res.headers).toBeDefined();
+          expect(res.text).toBeDefined();
+          expect(res.body).toBeDefined();
+          const body: any = JSON.parse(res.text);
+          expect(body).toBeDefined();
+          expect(body.product).toBeDefined();
+          expect(body.product._id).toBeDefined();
+          productId = body.product._id;
+          expect(body.product.name).toBeDefined();
+          expect(body.product.name).toEqual(product2.name);
+          expect(body.product.description).toBeDefined();
+          expect(body.product.description).toEqual(product2.description);
+          expect(body.product.price).toBeDefined();
+          expect(body.product.createdAt).toBeDefined();
+        })
+    }); // it
+    it('/.../:productID check put again (GET)', () => {
+      // console.log(productId);
+      return request(app.getHttpServer())
+        .get('/product/' + productId )
+        .expect(HttpStatus.FOUND)
+        .expect((res) => {
+          expect(res.headers).toBeDefined();
+          expect(res.text).toBeDefined();
+          expect(res.body).toBeDefined();
+          const body: any = JSON.parse(res.text);
+          expect(body).toBeDefined();
+          expect(body.product).toBeDefined();
+          expect(body.product._id).toBeDefined();
+          productId = body.product._id;
+          expect(body.product.name).toBeDefined();
+          expect(body.product.name).toEqual(product2.name);
+          expect(body.product.description).toBeDefined();
+          expect(body.product.description).toEqual(product2.description);
+          expect(body.product.price).toBeDefined();
+          expect(body.product.createdAt).toBeDefined();
+        })
+    }); // it
     it('/.../:productID (DELETE)', () => {
       // console.log(productId);
       return request(app.getHttpServer())
@@ -188,7 +239,7 @@ describe('(e2e)', () => {
     //       productId = body.product._id;
     //     })
     // }); // it
-    // it('/.../:productID again (DELETE)', () => {
+    // it('/.../delete?productID= again (DELETE)', () => {
     //   console.log(productId);
     //   return request(app.getHttpServer())
     //     .delete('/product/delete?productID=' + productId )
@@ -208,8 +259,8 @@ describe('(e2e)', () => {
     //       expect(body.product.createdAt).toBeDefined();
     //     })
     // }); // it
-    // it('/.../:productID again not found (DELETE)', () =>
-    //   request(app.getHttpServer()).delete('/product/delete/?productID=' + productId).expect(HttpStatus.NOT_FOUND));
+    // it('/.../delete?productID= again not found (DELETE)', () =>
+    //   request(app.getHttpServer()).delete('/product/delete?productID=' + productId).expect(HttpStatus.NOT_FOUND));
 
   });
 });

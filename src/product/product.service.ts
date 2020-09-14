@@ -4,6 +4,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Product } from './interfaces/product.interface';
 import CreateProductDTO from './dto/product.dto'
 
+
 @Injectable()
 export class ProductService {
   constructor(@InjectModel('Product') private readonly productModel: Model<Product>) {
@@ -27,7 +28,7 @@ export class ProductService {
     return product;
   }
   async updateProduct(productID: string, createProductDTO: CreateProductDTO): Promise<Product>{
-    const product = await this.productModel.findByIdAndUpdate(productID, createProductDTO, {new: true});
+    const product = await this.productModel.findByIdAndUpdate(productID, createProductDTO, {useFindAndModify: false, new: true});
     return product;
   }
 }

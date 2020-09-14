@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Res, HttpStatus, Body, Param, NotFoundException, Query } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Res, HttpStatus, Body, Param, NotFoundException, Query, BadGatewayException  } from '@nestjs/common';
 import CreateProductDTO from '../product/dto/product.dto';
 
 import { ProductService } from '../product/product.service';
@@ -60,6 +60,16 @@ export class ProductController {
       product
     })
   }
+
+  @Put('/:productID')
+  async productPut(@Res() res, @Param('productID') productID, @Body() createProductDTO: CreateProductDTO)  {
+    const product = await this.productService.updateProduct(productID, createProductDTO);
+    if (!product) throw new NotFoundException(productID);
+    return res.status(HttpStatus.FOUND).json({
+      product
+    })
+  }
+
   @Delete('/:productID')
   async productDelete(@Res() res, @Param('productID') productID)  {
     const product = await this.productService.deleteProduct(productID);
@@ -69,13 +79,17 @@ export class ProductController {
     })
   }
 
-  // @Delete('/delete')
-  // async productDeleteQuery(@Res() res, @Query('productID') productID)  {
-  //   const product = await this.productService.deleteProduct(productID);
-  //   if (!product) throw new NotFoundException(productID);
-  //   return res.status(HttpStatus.FOUND).json({
-  //     product
-  //   })
-  // }
+  @Delete('/delete')
+  async deleteDelete(@Res() res, @Query('productID') productID)  {
+    console.log(productID);
+    if (!productID.match(/^[0-9a-fA-F]{24}$/)) {
+      throw new BadGatewayException(productID);
+    }
+    const product = await this.productService.deleteProduct(productID);
+    if (!product) throw new NotFoundException(productID);
+    return res.status(HttpStatus.FOUND).json({
+      product
+    })
+  }
 
 }
