@@ -18,6 +18,7 @@ export class ProductController {
       product: product
     })
   }
+
   @Post('/ping')
   pingPost(@Res() res)  {
     return res.status(HttpStatus.OK).json({

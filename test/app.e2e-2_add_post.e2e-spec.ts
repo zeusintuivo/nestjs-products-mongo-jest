@@ -34,8 +34,8 @@ describe('(e2e)', () => {
         .expect(200)
         .expect('{"message":"received"}');
     });
-    it('/create (POST)', () => {
 
+    it('/create (POST)', () => {
       const product: CreateProductDTO = {
         name: "laptop",
         description: "Dell Laptop",
@@ -46,7 +46,6 @@ describe('(e2e)', () => {
       return request(app.getHttpServer())
         .post('/product/create')
         .send(product)
-        .expect(200)
         .expect((res) => {
           expect(res.headers).toBeDefined();
           // console.log(res.text);
